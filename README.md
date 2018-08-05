@@ -1,2 +1,2 @@
 # Practicing_C
-A repository for improving C and C++ programming
+This repository is a collection of solution to programming problems which I'm solving to improve my C/C++ programming skills. specifically I'm focusing on data structure and algorithm problems.
