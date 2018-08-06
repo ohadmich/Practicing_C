@@ -1,3 +1,8 @@
+/************************************************************************************
+ Computes for each element in a number series, the closest larger number with smaller index - x, 
+ the next colsest number with larger index - y and outputs their sum. 
+ ************************************************************************************/
+
 #include <stdio.h>
 #include <iostream>
 using namespace std;

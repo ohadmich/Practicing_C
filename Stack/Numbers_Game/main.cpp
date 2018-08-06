@@ -1,3 +1,8 @@
+/************************************************************************************
+ Computes for each element in a number series - A, the closest larger number with larger index - x, 
+ the colsest smaller number with larger index - y and outputs y[x[A]] 
+ ************************************************************************************/
+
 #include <stdio.h>
 #include <iostream>
 using namespace std;
