@@ -8,26 +8,16 @@ struct Node{
     struct Node* next;
 };
 
-// A function to add a Node to the list
+// A function to add a Node at the head of the list
 void addNode(struct Node** head, int newpop)
 {
     // Create a new node with the new data
     struct Node* node = (struct Node*)malloc(sizeof(struct Node));
-    node->next = NULL;
     node->pop = newpop;
-
-    // if the list is empty, add the node as head
-    if (*head == NULL) *head = node;
-    // else, traverse the list and add node at the end
-    else
-    {
-        struct Node* current = *head;
-        while(current->next != NULL)
-        {
-            current = current->next;
-        }
-        current->next = node;
-    }
+    // set next Node to head
+    node->next = *head;
+    // set head to be node
+    *head = node;
 }
 
 void delNode(struct Node* current)
@@ -37,7 +27,25 @@ void delNode(struct Node* current)
     free(tempNode);
     tempNode = NULL;
 }
-    
+
+// recursive function to reverse a list
+void reverseList(struct Node** head)
+{
+    // devide list to first node and the rest
+    struct Node* first = *head;
+    struct Node* rest = first->next;
+    // if the list is empty - return
+    if(*head == NULL) return;
+    // if rest is NULL - return
+    if (rest == NULL) return;
+    // reverse the rest of the list
+    reverseList(&rest);
+    // link the reversed list to first and set the next of the first to NULL
+    first->next->next = first;
+    first->next = NULL;
+    // change head pointer to rest
+    *head = rest;
+}    
 
 void printList(struct Node* head)
 {
@@ -65,6 +73,8 @@ int main()
             scanf("%d", &temp);
             addNode(&head, temp);
         }
+        // reverse list
+        reverseList(&head);
         // delete K freinds
         while(K--)
         {
