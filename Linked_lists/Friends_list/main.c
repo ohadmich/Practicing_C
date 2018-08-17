@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Define a Node with popularity data and pointer to next Node
 struct Node{
@@ -29,6 +30,15 @@ void addNode(struct Node** head, int newpop)
     }
 }
 
+void delNode(struct Node* current)
+{
+    struct Node* tempNode = current->next;
+    current->next = current->next->next;
+    free(tempNode);
+    tempNode = NULL;
+}
+    
+
 void printList(struct Node* head)
 {
     while(head != NULL)
@@ -40,16 +50,51 @@ void printList(struct Node* head)
 
 int main()
 {
-    int N, temp;
-    struct Node* head = NULL;
-    scanf("%d", &N);
-    while(N--)
+    int T, N, K, temp;
+    // read number of test cases
+    scanf("%d", &T);
+    while(T--)
     {
-        scanf("%d", &temp);
-        addNode(&head, temp);
+        struct Node* head = NULL;
+        // read number of friends, N, and who many of them should be deleted, K
+        scanf("%d", &N);
+        scanf("%d", &K);
+        // read list of popularity values into our linked list
+        while(N--)
+        {
+            scanf("%d", &temp);
+            addNode(&head, temp);
+        }
+        // delete K freinds
+        while(K--)
+        {
+            bool deleteFriend = 0;
+            // first check if the head should be deleted
+            if(head->next->pop > head->pop)
+            {
+                struct Node* tempNode = head;
+                head = head->next;
+                free(tempNode);
+                continue;
+            }
+            // check the the rest of the list
+            struct Node* current = head;
+            while(current->next->next != NULL)
+            {
+                if( (current->next->next->pop) > (current->next->pop) )
+                {
+                    delNode(current);
+                    deleteFriend = 1;
+                    break;
+                }
+                current = current->next;
+            }
+            // delete last node if we didn't find any node to delete
+            if(!deleteFriend) delNode(current);
+        }
+        printList(head);
+        printf("\n");
     }
-
-    printList(head);
     
     return 0;
 }
