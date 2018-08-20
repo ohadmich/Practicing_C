@@ -3,30 +3,40 @@
 #include <stdbool.h>
 #include <time.h>
 
-// Define a Node with popularity data and pointer to next Node
+// define a Node with dataularity data and pointer to next Node
 struct Node{
-    int pop;
+    int data;
     struct Node* next;
 };
 
-// A function to add a Node at the head of the list
-void addNode(struct Node** head, int newpop)
+// a function to add a Node at the head of the list
+void addNode(struct Node** head, int newdata)
 {
     // Create a new node with the new data
     struct Node* node = (struct Node*)malloc(sizeof(struct Node));
-    node->pop = newpop;
+    node->data = newdata;
     // set next Node to head
     node->next = *head;
     // set head to be node
     *head = node;
 }
 
-void delNode(struct Node* current)
+// a function to delete the node that comes after current
+void delNode(struct Node** current, bool delhead)
 {
-    struct Node* tempNode = current->next;
-    current->next = current->next->next;
-    free(tempNode);
-    tempNode = NULL;
+    if (delhead)
+    {
+        struct Node* tempNode = *current;
+        *current = (*current)->next;
+        free(tempNode);
+    }
+    else
+    {
+        struct Node* tempNode = (*current)->next;
+        (*current)->next = (*current)->next->next;
+        free(tempNode);
+        tempNode = NULL;
+    }
 }
 
 // non recursive function for reversing lists:
@@ -75,13 +85,45 @@ struct Node* reverseList(struct Node* head)
     return rev(head, NULL);
 }
 
+// a function to print the linked list
 void printList(struct Node* head)
 {
     while(head != NULL)
     {
-        printf("%d ", head->pop);
+        printf("%d ", head->data);
         head = head->next;
     }
+}
+
+// create a stack for Node pointers
+struct Node* listStack[100000] = {};
+int top = 0;
+
+void push(struct Node* node)
+{
+    top = top+1;
+    listStack[top] = node;
+}
+
+bool isEmpty()
+{
+    return top == -1;
+}
+
+void pop()
+{
+    if (isEmpty()) return;
+    else top = top-1;
+}
+
+struct Node* topElement()
+{
+    return listStack[top];
+}
+
+void intstack()
+{
+    top = -1;
 }
 
 int main()
@@ -108,27 +150,25 @@ int main()
         {
             bool deleteFriend = 0;
             // first check if the head should be deleted
-            if(head->next->pop > head->pop)
+            if(head->next->data > head->data)
             {
-                struct Node* tempNode = head;
-                head = head->next;
-                free(tempNode);
+                delNode(&head,1);
                 continue;
             }
             // check the the rest of the list
             struct Node* current = head;
             while(current->next->next != NULL)
             {
-                if( (current->next->next->pop) > (current->next->pop) )
+                if( (current->next->next->data) > (current->next->data) )
                 {
-                    delNode(current);
+                    delNode(&current,0);
                     deleteFriend = 1;
                     break;
                 }
                 current = current->next;
             }
             // delete last node if we didn't find any node to delete
-            if(!deleteFriend) delNode(current);
+            if(!deleteFriend) delNode(&current,0);
         }
         printList(head);
         printf("\n");
