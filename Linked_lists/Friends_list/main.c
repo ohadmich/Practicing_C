@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 // Define a Node with popularity data and pointer to next Node
 struct Node{
@@ -28,24 +29,51 @@ void delNode(struct Node* current)
     tempNode = NULL;
 }
 
-// recursive function to reverse a list
-void reverseList(struct Node** head)
+// non recursive function for reversing lists:
+struct Node* revlist(struct Node* head)
 {
-    // devide list to first node and the rest
-    struct Node* first = *head;
-    struct Node* rest = first->next;
-    // if the list is empty - return
-    if(*head == NULL) return;
-    // if rest is NULL - return
-    if (rest == NULL) return;
-    // reverse the rest of the list
-    reverseList(&rest);
-    // link the reversed list to first and set the next of the first to NULL
-    first->next->next = first;
-    first->next = NULL;
-    // change head pointer to rest
-    *head = rest;
-}    
+    struct Node* current = head, *PREV = NULL, *NEXT = NULL;
+    if (current == NULL) return current;
+    while(current->next != NULL)
+    {
+        NEXT = current->next;
+        current->next = PREV;
+        PREV = current;
+        current = NEXT;
+    }
+    current->next = PREV;
+    return current;
+}
+
+// a helper function to reverse a linked list
+struct Node* rev(struct Node* current, struct Node* PREV)
+{
+    // if the list is empty, return empty list
+    if (current == NULL) return current;
+    // if the end of the list was reached, connect the node to previous and return node
+    else if (current->next == NULL)
+    {
+        current->next = PREV;
+        return current;
+    }
+    // in the general case
+    else
+    {
+        // save next node into NEXT
+        struct Node* NEXT = current->next;
+        // set the next node to be the previous one
+        current->next = PREV;
+        // update previos node to be the current node for next iteration
+        PREV = current;
+        return rev(NEXT, PREV);
+    }
+}
+
+// recursive function to reverse a list
+struct Node* reverseList(struct Node* head)
+{
+    return rev(head, NULL);
+}
 
 void printList(struct Node* head)
 {
@@ -74,7 +102,7 @@ int main()
             addNode(&head, temp);
         }
         // reverse list
-        reverseList(&head);
+        head = revlist(head);
         // delete K freinds
         while(K--)
         {
@@ -105,6 +133,6 @@ int main()
         printList(head);
         printf("\n");
     }
-    
+
     return 0;
 }
