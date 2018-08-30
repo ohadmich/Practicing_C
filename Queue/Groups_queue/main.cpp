@@ -8,29 +8,16 @@ at the end of the queue. 'D' operation print the group name and roll number of t
 using namespace std;
 #define Nmax 100000
 
-// Define four queues to keep elements of each group and additional queue for the the order of
-// group appearance on the entire queue.
-int queue[Nmax]={}, queue1[Nmax]={}, queue2[Nmax]={}, queue3[Nmax]={}, queue4[Nmax]={};
-int front = 0, front1 = 0, front2 = 0, front3 = 0, front4 = 0;
-int rear = 0, rear1 = 0, rear2 = 0, rear3 = 0, rear4 = 0;
-
-// A function that checks if a certain group exist in the queue
-bool exist(int gr){
-    int current = front;
-    while(current < rear)
-    {
-        if(queue[current] == gr)
-        return true;
-        current = current + 1;
-    }
-    return false;
-}
+// Define four queues[1-4] to keep elements of each group and additional queue[0] for the the order of
+// group appearance.
+int queue[5][Nmax]={};
+int front[5] = {}, rear[5] = {};
+bool exist[5] = {};
 
 int main()
 {
     int N, group, roll;
     char ch;
-
     // Read number of operations to be done
     cin >> N;
     while(N--)
@@ -43,79 +30,37 @@ int main()
             // Read group number and roll number of the element
             cin >> group;
             cin >> roll;
-            // Check to which group the element is related
-            if(group==1)
+            // Run over group numbers
+            for(int i=1; i<5; i++)
             {
-                // if the group doesn't exist in queue then enqueue it
-                if(!exist(1))
+                // Check to which group the element is related
+                if (group == i)
                 {
-                    queue[rear] = 1;
-                    rear = rear + 1;
+                    // if the group doesn't exist in queue[0] then enqueue it
+                    if(!exist[i])
+                    {
+                        queue[0][rear[0]] = i;
+                        rear[0] = rear[0] + 1;
+                        exist[i] = true;
+                    }
+                    // enqueue the roll number to the groups' queue
+                    queue[i][rear[i]] = roll;
+                    rear[i] = rear[i] + 1;
                 }
-                // enqueue the roll number to the groups' queue
-                queue1[rear1] = roll;
-                rear1 = rear1 + 1;
-            }
-            else if(group==2)
-            {
-                if(!exist(2))
-                {
-                    queue[rear] = 2;
-                    rear = rear + 1;
-                }
-                queue2[rear2] = roll;
-                rear2 = rear2 + 1;
-            }
-            else if(group==3)
-            {
-                if(!exist(3))
-                {
-                    queue[rear] = 3;
-                    rear = rear + 1;
-                }
-                queue3[rear3] = roll;
-                rear3 = rear3 + 1;
-            }
-            else if(group==4)
-            {
-                if(!exist(4))
-                {
-                    queue[rear] = 4;
-                    rear = rear + 1;
-                }
-                queue4[rear4] = roll;
-                rear4 = rear4 + 1;
             }
         }
         // Dequeue case
         else if(ch == 'D')
         {
             // Check which group is in the front
-            if(queue[front] == 1) 
+            group = queue[0][front[0]]; 
             {
                 // Print the group number and roll number of the front element
-                cout << 1 << ' ' << queue1[front1] << '\n';
-                front1 = front1 +1;
-                // If the dequeued element was the last one, then deque the group from queue
-                if(front1 == rear1) front = front +1;
-            }
-            else if(queue[front] == 2)
-            {
-                cout << 2 << ' ' << queue2[front2] << '\n';
-                front2 = front2 +1;
-                if(front2 == rear2) front = front +1;
-            }
-            else if(queue[front] == 3)
-            {
-                cout << 3 << ' ' << queue3[front3] << '\n';
-                front3 = front3 +1;
-                if(front3 == rear3) front = front +1;
-            }
-            else if(queue[front] == 4)
-            {
-                cout << 4 << ' ' << queue4[front4] << '\n';
-                front4 = front4 +1;
-                if(front4 == rear4) front = front +1;
+                cout << group << ' ' << queue[group][front[group]] << '\n';
+                // Deque element
+                front[group] = front[group] +1;
+                // If the dequeued element was the last one, then deque the group from queue[0]
+                if(front[group] == rear[group]) front[0] = front[0] +1, exist[group] = false;
             }
         }
     }
