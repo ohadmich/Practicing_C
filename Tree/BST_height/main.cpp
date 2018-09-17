@@ -1,3 +1,6 @@
+/******************************************************************************************************
+ This code gets a binary tree as an input, Builds a tree, measures it's height and prints the result
+ *****************************************************************************************************/
 #include <iostream>
 #include <stdlib.h>
 #include <algorithm>
@@ -54,7 +57,7 @@ int main()
         while(current != NULL)
         {
             // if the new node is smaller go left
-            if(temp < current->data)
+            if(temp <= current->data)
             {
                 previous = current;
                 current = current->left;
