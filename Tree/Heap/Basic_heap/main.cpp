@@ -1,6 +1,11 @@
+/*****************************************************************************************************
+ This code gets an array of length N as an input, builds a heap out of it and then apply q operations
+ each one of then is either insertion of a new element while maintaining order or printing max value.
+ ****************************************************************************************************/
+
 #include <iostream>
 using namespace std;
-#define L int(1e5+1)
+#define L int(2e5)
 
 // A utility function for swapping two elements in an array
 void Swap(int* A, int a, int b)
@@ -39,15 +44,23 @@ void orderMaxheap(int* A, int N)
 {
     for(int i = N/2; i>0; i--) maxHeapify(A, i, N);
 }
-
-void insertNum(int* A, int num)
+// A function to insert a new element and maintains max heap ordering
+void insertNum(int* A, int num, int &N)
 {
-
+    N = N + 1; // increase array size
+    A[N] = num; // add new element at the end
+    int i = N; // initialize index
+    // while A[i] is larger than its parent, swap them 
+    while(i > 1 & A[i/2] < A[i])
+    {
+        Swap(A, i/2, i);
+        i = i/2;
+    }
 }
 
 void printMax(int* A)
 {
-
+    cout << A[1] << endl;
 }
 
 int main()
@@ -63,8 +76,6 @@ int main()
     }
     // Ordering the heap
     orderMaxheap(A, N);
-    printArray(A, N);
-    /*
     // Applying operations
     cin >> q;
     while(q--)
@@ -72,19 +83,18 @@ int main()
         // Read operation type
         int type;
         cin >> type;
-        // If you get "inset" operation
+        // If you get an "inset" operation
         if(type == 1)
         {
             int newnum;
             cin >> newnum;
-            insertNum(A, newnum);
+            insertNum(A, newnum, N);
         }
-        // If you get "max" operation
+        // If you get a "max" operation
         else if(type == 2)
         {
             printMax(A);
         }
-    } 
-    */
+    }
     return 0;
 }
