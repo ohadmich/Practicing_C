@@ -5,7 +5,7 @@ deleted - K, a list of N numbers representing the rank/popularity of each person
 linked list out of the ranks and deletes K persons from the list based on the following rule: if the 
 next person has higher rank - delete the current person, if there is no next person with higher rank 
 (which means you reached the end of the list) delete the last person on the list.
-Finally the program prints the resulting list.
+Finally, the program prints the resulting list.
 ********************************************************************************************************/
 
 #include <stdio.h>
