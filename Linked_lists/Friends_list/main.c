@@ -1,9 +1,19 @@
+/********************************************************************************************************
+This code takes a list of N ranks of people and deletes K of them based on a rule described below.
+inputs: The number of test cases - T, the number of people in the list - N and the number of people to be
+deleted - K, a list of N numbers representing the rank/popularity of each person. The code creates a 
+linked list out of the ranks and deletes K persons from the list based on the following rule: if the 
+next person has higher rank - delete the current person, if there is no next person with higher rank 
+(which means you reached the end of the list) delete the last person on the list.
+Finally the program prints the resulting list.
+********************************************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
 
-// define a Node with dataularity data and pointer to next Node
+// define a Node that contains data and pointer to next Node
 struct Node{
     int data;
     struct Node* next;
@@ -15,21 +25,23 @@ void addNode(struct Node** head, int newdata)
     // Create a new node with the new data
     struct Node* node = (struct Node*)malloc(sizeof(struct Node));
     node->data = newdata;
-    // set next Node to head
+    // set next Node to be the current head
     node->next = *head;
-    // set head to be node
+    // set head to be our new node
     *head = node;
 }
 
-// a function to delete the node that comes after current
+// a function to delete the node that comes after "current"
 void delNode(struct Node** current, bool delhead)
 {
+    // if the node to be deleted is the head
     if (delhead)
     {
         struct Node* tempNode = *current;
         *current = (*current)->next;
         free(tempNode);
     }
+    // else, for any other node
     else
     {
         struct Node* tempNode = (*current)->next;
@@ -99,7 +111,7 @@ void printList(struct Node* head)
 struct Node* listStack[100000] = {};
 int top = -1;
 
-// push to stack function
+// a function for pushing a node to the stack
 void push(struct Node* node)
 {
     top = top+1;
@@ -112,20 +124,20 @@ bool isEmpty()
     return top == -1;
 }
 
-// pop element off of stack
+// a function for popping elements off of the stack
 void pop()
 {
     if (isEmpty()) return;
     else top = top-1;
 }
 
-// returns the top element in the stack
+// a function that returns the top element in the stack
 struct Node* topElement()
 {
     return listStack[top];
 }
 
-// initializes the stack
+// a function to initialize the stack
 void intstack()
 {
     top = -1;
@@ -148,7 +160,7 @@ int main()
             scanf("%d", &temp);
             addNode(&head, temp);
         }
-        // reverse list to make the next step easier
+        // reverse the list to allow easier operations on the list
         head = revlist(head);
         /**** delete K freinds for which the next friend has higher popularity ****/
         intstack();
@@ -164,7 +176,7 @@ int main()
             }
             // pop the node that doesn't obey the rule
             pop();
-            // if the stack is empty have to delete the head
+            // if the stack is empty, delete the head
             if (isEmpty())
             {
                 delNode(&head,1);
