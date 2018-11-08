@@ -145,6 +145,12 @@ void Diff()
 
 void CountHigh()
 {
+    // if the heap is empty, print -1 and return
+    if(N < 1)
+    {
+        cout << -1 << endl;
+        return;
+    }
     // Create a copy of the max heap
     int A[L]={};
     for(int i = 1; i<=N; i++)
@@ -172,6 +178,12 @@ void CountHigh()
 
 void CountLow()
 {
+    // if the heap is empty, print -1 and return
+    if(N < 1)
+    {
+        cout << -1 << endl;
+        return;
+    }
     // Create a copy of the min heap
     int A[L]={};
     for(int i = 1; i<=N; i++)
@@ -224,6 +236,10 @@ int main()
         else if(Op == "CountLow")
         {
             CountLow();
+        }
+        else if(Op == "Print")
+        {
+            print();
         }
     }
 
