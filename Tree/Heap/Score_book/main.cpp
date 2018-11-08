@@ -20,17 +20,17 @@ void print()
     cout << endl;
 }
 
-// Order the max heap
-void maxHeapify()
+// Bubble the max value up - for ordering heaps after addition from the tail
+void Bubblemax()
 {
     // Return if the heap is empty
     if(N<1) return;
-    // define current node index and parent index
+    // Define current node index and parent index
     int i = N, p = N/2;
     /* Order the heap*/
     while(p >= 1)
     {
-        // Swap parent and child if they are not ordered
+        // Swap parent and child if the child is larger
         if(Amax[p] < Amax[i])
         {
             int temp = Amax[i];
@@ -42,17 +42,17 @@ void maxHeapify()
     }
 }
 
-// Order the min heap
-void minHeapify()
+// Bubble the min value up - for ordering heaps after addition from the tail
+void Bubblemin()
 {
     // Return if the heap is empty
     if(N<1) return;
-    // define current node index and parent index
+    // Define current node index and parent index
     int i = N, p = N/2;
     /* Order the heap*/
     while(p >= 1)
     {
-        // Swap parent and child if they are not ordered
+        // Swap parent and child if the child is smaller
         if(Amin[p] > Amin[i])
         {
             int temp = Amin[i];
@@ -64,6 +64,49 @@ void minHeapify()
     }
 }
 
+
+// Order the max heap top down
+void maxHeapify(int A[L], int n, int i)
+{
+    // Define left and right node indices
+    int left = 2*i, right = 2*i +1;
+    // Initialize largest to be i, then change if needed
+    int largest = i;
+    // If left is within the array bounds and its element is larger, change largest
+    if( left <= n && A[left] > A[i]) largest = left;
+    // If right is within the array bounds and its element is larger, change largest
+    if(right <= n && A[right] > A[i]) largest = right;
+    // If i is not the largest element, swap places and then check the new subtree
+    if(largest != i)
+    {
+        int temp = A[i];
+        A[i] = A[largest];
+        A[largest] = temp;
+        maxHeapify(A, n, largest);
+    }
+}
+
+// Order the min heap top down
+void minHeapify(int A[L], int n, int i)
+{
+    // Define left and right node indices
+    int left = 2*i, right = 2*i +1;
+    // Initialize smallest to be i, then change if needed
+    int smallest = i;
+    // If left is within the array bounds and its element is smaller, change smallest
+    if( left <= n && A[left] < A[i]) smallest = left;
+    // If right is within the array bounds and its element is smaller, change smallest
+    if(right <= n && A[right] < A[i]) smallest = right;
+    // If i is not the smallest element, swap places and then check the new subtree
+    if(smallest != i)
+    {
+        int temp = A[i];
+        A[i] = A[smallest];
+        A[smallest] = temp;
+        maxHeapify(A, n, smallest);
+    }
+}
+
 // Push new element to each heap and then order them
 void Push(int X)
 {
@@ -72,8 +115,8 @@ void Push(int X)
     Amax[N] = X;
     Amin[N] = X;
     // Order heaps
-    maxHeapify();
-    minHeapify();
+    Bubblemax();
+    Bubblemin();
 
 }
 
@@ -81,7 +124,7 @@ void Diff()
 {
     // When the array is empty print -1
     if(N == 0){
-        cout << -1;
+        cout << -1 << endl;
         return;
     }
     // Compute max - min difference
@@ -95,19 +138,62 @@ void Diff()
     Amin[N] = 0;
     N = N - 1;
     // Order heaps
-    maxHeapify();
-    minHeapify();
+    maxHeapify(Amax, N, 1);
+    minHeapify(Amin, N, 1);
 
 }
 
 void CountHigh()
 {
+    // Create a copy of the max heap
+    int A[L]={};
+    for(int i = 1; i<=N; i++)
+    {
+        A[i] = Amax[i];
+    }
+    // Initialize count and save max value
+    int count = 0, max = A[1], n = N;
+    // Pop max and reorder until you get a different max
+    while(A[1] == max)
+    {
+        // Pop max and move the last element to the top
+        A[1] = A[n];
+        A[n] = 0;
+        n = n-1;
+        // Order heap
+        maxHeapify(A, n, 1);
+        // Count
+        count++;
+    }
+    // print number of max value elements
+    cout << count << endl;
 
 }
 
 void CountLow()
 {
-
+    // Create a copy of the min heap
+    int A[L]={};
+    for(int i = 1; i<=N; i++)
+    {
+        A[i] = Amin[i];
+    }
+    // Initialize count and save min value
+    int count = 0, min = A[1], n = N;
+    // Pop max and reorder until you get a different min
+    while(A[1] == min)
+    {
+        // Pop min and move the last element to the top
+        A[1] = A[n];
+        A[n] = 0;
+        n = n-1;
+        // Order heap
+        minHeapify(A, n, 1);
+        // Count
+        count++;
+    }
+    // print number of min value elements
+    cout << count << endl;
 }
 
 int main()
