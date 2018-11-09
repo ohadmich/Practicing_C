@@ -21,12 +21,12 @@ void print()
 }
 
 // Bubble the max value up - for ordering heaps after addition from the tail
-void Bubblemax()
+void Bubblemax(int i)
 {
     // Return if the heap is empty
     if(N<1) return;
-    // Define current node index and parent index
-    int i = N, p = N/2;
+    // Define parent index
+    int p = i/2;
     /* Order the heap*/
     while(p >= 1)
     {
@@ -43,12 +43,12 @@ void Bubblemax()
 }
 
 // Bubble the min value up - for ordering heaps after addition from the tail
-void Bubblemin()
+void Bubblemin(int i)
 {
     // Return if the heap is empty
     if(N<1) return;
-    // Define current node index and parent index
-    int i = N, p = N/2;
+    // Define parent index
+    int p = i/2;
     /* Order the heap*/
     while(p >= 1)
     {
@@ -73,9 +73,9 @@ void maxHeapify(int A[L], int n, int i)
     // Initialize largest to be i, then change if needed
     int largest = i;
     // If left is within the array bounds and its element is larger, change largest
-    if( left <= n && A[left] > A[i]) largest = left;
+    if( left <= n && A[left] > A[largest]) largest = left;
     // If right is within the array bounds and its element is larger, change largest
-    if(right <= n && A[right] > A[i]) largest = right;
+    if(right <= n && A[right] > A[largest]) largest = right;
     // If i is not the largest element, swap places and then check the new subtree
     if(largest != i)
     {
@@ -94,9 +94,9 @@ void minHeapify(int A[L], int n, int i)
     // Initialize smallest to be i, then change if needed
     int smallest = i;
     // If left is within the array bounds and its element is smaller, change smallest
-    if( left <= n && A[left] < A[i]) smallest = left;
+    if( left <= n && A[left] < A[smallest]) smallest = left;
     // If right is within the array bounds and its element is smaller, change smallest
-    if(right <= n && A[right] < A[i]) smallest = right;
+    if(right <= n && A[right] < A[smallest]) smallest = right;
     // If i is not the smallest element, swap places and then check the new subtree
     if(smallest != i)
     {
@@ -115,8 +115,8 @@ void Push(int X)
     Amax[N] = X;
     Amin[N] = X;
     // Order heaps
-    Bubblemax();
-    Bubblemin();
+    Bubblemax(N);
+    Bubblemin(N);
 
 }
 
@@ -127,11 +127,18 @@ void Diff()
         cout << -1 << endl;
         return;
     }
+    // When there is only one element in the array, print zero and reduce N to 0  
+    if(N == 1){
+        cout << 0 << endl;
+        N = N-1;
+        return;
+    }
     // Compute max - min difference
-    int diff = Amax[1] - Amin[1];
+    int maxEl = Amax[1], minEl = Amin[1];
+    int diff = maxEl - minEl;
     // Print diff
     cout << diff << endl;
-    // Delete elements
+    // Delete top elements
     Amax[1] = Amax[N];
     Amax[N] = 0;
     Amin[1] = Amin[N];
@@ -140,6 +147,33 @@ void Diff()
     // Order heaps
     maxHeapify(Amax, N, 1);
     minHeapify(Amin, N, 1);
+    // Delete leaf from max heap
+    int imin = N/2 +1, imax = N/2 +1;
+    while(imin <= N)
+    {
+        if(Amax[imin] == minEl) break;
+        imin++;
+    }
+    while(imin <= N)
+    {
+        Amax[imin] = Amax[imin+1];
+        Bubblemax(imin);
+        imin++;
+    }
+    // Delete leaf from min heap
+    while(imax <= N)
+    {
+        if(Amin[imax] == maxEl) break;
+        imax++;
+    }
+    while(imax <= N)
+    {
+        Bubblemin(imax);
+        Amin[imax] = Amin[imax+1];
+        imax++;
+    }
+    N = N-1;
+
 
 }
 
@@ -223,7 +257,6 @@ int main()
         {
             cin >> X;
             Push(X);
-            print();
         }
         else if(Op == "Diff")
         {
