@@ -103,7 +103,7 @@ void minHeapify(int A[L], int n, int i)
         int temp = A[i];
         A[i] = A[smallest];
         A[smallest] = temp;
-        maxHeapify(A, n, smallest);
+        minHeapify(A, n, smallest);
     }
 }
 
@@ -119,7 +119,7 @@ void Push(int X)
     Bubblemin(N);
 
 }
-
+// Find the difference between the largest and smallest elements
 void Diff()
 {
     // When the array is empty print -1
@@ -176,7 +176,7 @@ void Diff()
 
 
 }
-
+// Count how many instances of the largest element exist
 void CountHigh()
 {
     // if the heap is empty, print -1 and return
@@ -209,7 +209,7 @@ void CountHigh()
     cout << count << endl;
 
 }
-
+// Count how many instances of the smallest element exist
 void CountLow()
 {
     // if the heap is empty, print -1 and return
