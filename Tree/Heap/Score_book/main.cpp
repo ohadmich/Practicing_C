@@ -1,3 +1,11 @@
+/*******************************************************************************************************
+ This code creates a score book with 5 different operations: Push # - add a number to the book. 
+ Diff - Print the difference between the largest and smallest values in the book and then delete one
+ instance of each one. CountHigh - Print the number of instances of the highest score that exist in the
+ book. CountLow - Same as CountHigh, but for the lowest value in the book. Print - Print a max heap and
+ min heap of the current data in the book.
+ ******************************************************************************************************/
+
 #include <iostream>
 using namespace std;
 #define L int(1e5 + 1)
@@ -166,10 +174,10 @@ void Diff()
         if(Amin[imax] == maxEl) break;
         imax++;
     }
-    while(imax <= N)
+    while(imax < N)
     {
-        Bubblemin(imax);
         Amin[imax] = Amin[imax+1];
+        Bubblemin(imax);
         imax++;
     }
     N = N-1;
