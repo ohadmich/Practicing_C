@@ -13,7 +13,7 @@ using namespace std;
 // Define arrays for max and min heaps and a frequency array to keep account for repeating scores
 int Amax[L] = {}, Amin[L] = {}, Freq[L] = {}, Nmin = 0, Nmax = 0;
 
-// Print max and min heaps
+// Print max heap, frequency of the elements in it and min heap
 void print()
 { 
     for(int i=1; i<=Nmax; i++)
